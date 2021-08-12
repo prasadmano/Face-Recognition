@@ -1,0 +1,115 @@
+ScreenManager:
+    HomeScreen:
+    RightSide:
+    LeftSide:
+
+<HomeScreen>:
+    name: "home_screen"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "ssvm_logo.jpg"
+
+    Button:
+        #Text on Button
+        text: "Admin"
+        # background_color color of button
+        background_color: 1, 1, 1, 1
+        # size of button
+        size_hint: 0.3, 0.1
+        on_press : app.root.current = "left_side"
+        # position of the admin switch
+        pos_hint: {"x":.6, "top":0.2}
+
+    Button:
+        text:"Student Login"
+        background_color: 1, 1, 1, 1
+        on_press : app.root.current = "right_side"
+        size_hint: .3, .1
+        pos_hint: {"x":0.1, "top":0.2}
+
+<RightSide>:
+    name: 'right_side'
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: "vertical"
+        # Label:
+        #     height: 20
+        #     size_hint_y: None
+        #     text: 'Testing the camera'
+        KivyCamera_student:
+            id: qrcam
+            size_hint: 0.8, 0.6
+            pos_hint: {"x":0.1, "y":0.3}
+
+        BoxLayout:
+            orientation: "horizontal"
+            height: 20
+            size_hint_y: None
+            Button:
+                id: butt_start
+                size_hint: 0.5,5
+                text: "Start"
+                on_press: root.dostart()
+                #on_press : app.clocked_switch()
+                on_release: root.manager.transition.direction = "right"
+            Button:
+                id: butt_exit
+                text: "Back"
+                size_hint: 0.5,5
+                on_press: app.doexit()
+                on_press :app.root.current = "home_screen"
+                on_release: root.manager.transition.direction = "left"
+
+<LeftSide>:
+    name: 'left_side'
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: "vertical"
+
+        Label:
+            height: 20
+            size_hint_y: None
+            text: 'Register'
+        KivyCamera_admin:
+            id: qrcam
+            size_hint:1,1
+            pos_hint: {"x":0.1, "y":0.3}
+
+        BoxLayout:
+            size_hint: [1, 1]
+            orientation : 'horizontal'
+
+            TextInput:
+                hint_text:'Enter Name'
+                id : textinput
+                size_hint: [0.2, 0.2]
+            Button :
+                id: result_btn
+                size_hint: [0.2, 0.2]
+                text :'Take Photo'
+                bold: True
+                disabled: True if textinput.text == ''else False
+                on_press: root.dostart()
+                on_press: root.textinputandcreatefolder()
+            Button :
+                size_hint: [0.2, .2]
+                text :'Train'
+                bold: True
+                on_press: app.traindata()
+            Button :
+                size_hint: [0.2, .2]
+                text :'Back'
+                bold: True
+                on_press: app.doexit()
+                on_release: app.root.current = "home_screen"
+                on_release: root.manager.transition.direction = "right"
